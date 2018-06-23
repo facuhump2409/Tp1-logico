@@ -25,6 +25,7 @@ saleCon(Quien,Cual):-
 	%pareja(Personaje,OtraPersona),
 	%Persona \= OtraPersona.
 esFiel(Personaje):-
+	saleCon(Personaje,_),
 	findall(Personaje,saleCon(Personaje,_),Lista),
 	length(Lista,1).
 
@@ -92,5 +93,29 @@ sanCayetano(Quien):-
 	tieneCerca(Quien,_),
 	forall(tieneCerca(Quien,PersonajeCercano),encargo(Quien,PersonajeCercano,_)).
 
-%Punto 3 
+%Punto 3 Nivel de respeto
 
+respect(actriz(Lista),NivelDeRespeto):-
+	length(Lista,Largo),
+	NivelDeRespeto is Largo/10.
+respect(mafioso(capo),20).
+respect(mafioso(resuelveProblemas),10).
+
+
+nivelRespeto(Personaje,NivelDeRespeto):-
+	personaje(Personaje,Ocupacion),
+	respect(Ocupacion,NivelDeRespeto).
+nivelRespeto(vincent,15).
+
+%Punto 4 Personajes respetables
+cantidadDeGente(Cantidad):-
+	findall(_,personaje(_,_),Lista),
+	length(Lista,Largo),
+	Cantidad is Largo.
+
+respetabilidad(Respetables,NoRespetables):-
+	findall(_,(nivelRespeto(_,Nivel),Nivel>9),ListaRespetable),
+	length(ListaRespetable,Largo),
+	Respetables is Largo,
+	cantidadDeGente(Cantidad),
+	NoRespetables is Cantidad-Respetables.
