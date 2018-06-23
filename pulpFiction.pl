@@ -119,3 +119,12 @@ respetabilidad(Respetables,NoRespetables):-
 	Respetables is Largo,
 	cantidadDeGente(Cantidad),
 	NoRespetables is Cantidad-Respetables.
+
+%Punto 5 mas atareado
+cantidadEncargos(Personaje,CantidadEncargos):-
+	findall(_,encargo(_,Personaje,_),Lista),
+	length(Lista,Largo),
+	CantidadEncargos is Largo.
+
+masAtareado(Personaje):-
+	forall(cantidadEncargos(Personaje,CantidadEncargos),)
