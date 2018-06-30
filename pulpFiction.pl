@@ -110,21 +110,20 @@ nivelRespeto(vincent,15).
 %Punto 4 Personajes respetables
 cantidadDeGente(Cantidad):-
 	findall(_,personaje(_,_),Lista),
-	length(Lista,Largo),
-	Cantidad is Largo.
+	length(Lista,Cantidad).
 
 respetabilidad(Respetables,NoRespetables):-
-	findall(_,(nivelRespeto(_,Nivel),Nivel>9),ListaRespetable),
-	length(ListaRespetable,Largo),
-	Respetables is Largo,
+	findall(Nivel,(nivelRespeto(_,Nivel),Nivel>9),ListaRespetable),
+	length(ListaRespetable,Respetables),
 	cantidadDeGente(Cantidad),
 	NoRespetables is Cantidad-Respetables.
 
 %Punto 5 mas atareado
 cantidadEncargos(Personaje,CantidadEncargos):-
-	findall(_,encargo(_,Personaje,_),Lista),
-	length(Lista,Largo),
-	CantidadEncargos is Largo.
+	findall(Personaje,encargo(_,Personaje,_),Lista),
+	length(Lista,CantidadEncargos).
 
 masAtareado(Personaje):-
-	forall(cantidadEncargos(Personaje,CantidadEncargos),)
+	personaje(Personaje,_),
+	cantidadEncargos(Personaje,CantidadEncargos),
+	forall((personaje(OtraPersona,_),cantidadEncargos(OtraPersona,CantidadEncargos2),Personaje\=OtraPersona),CantidadEncargos>CantidadEncargos2).
